@@ -21,12 +21,11 @@
 ## 计划任务
 
 - [x] 明确侧边栏改造范围。
-- [ ] 重构 `App` 的壳层结构。
-- [ ] 收紧 `AIConfigPanel`、`CleanupPanel`、`CategoryPreview` 的内容布局。
-- [ ] 调整 `globals.css` 和 popup 基础宽度。
+- [x] 重构 `App` 的壳层结构。
+- [x] 收紧 `AIConfigPanel`、`CleanupPanel`、`CategoryPreview` 的内容布局。
+- [x] 调整 `globals.css` 和 popup 基础宽度。
 - [ ] 运行验证并更新文档。
 
 ## 验收记录
 
-待完成后更新。
-
+待验证完成后更新。

@@ -1,11 +1,12 @@
-import { FolderTree, Trash2, Settings, Sparkles } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Trash2, Settings, Sparkles } from 'lucide-react';
 
 export type ShellTab = 'organize' | 'cleanup' | 'settings';
 
 export interface ShellNavItem {
   id: ShellTab;
   label: string;
-  icon: typeof Sparkles;
+  icon: LucideIcon;
 }
 
 export const SHELL_NAV_ITEMS: ShellNavItem[] = [
