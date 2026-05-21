@@ -22,7 +22,7 @@ export function resolvePresetModelConfig(modelId: string): { model: string; base
   }
 
   if (preset.provider === 'MiniMax') {
-    return { model: modelId, baseUrl: 'https://api.minimaxi.com/v1' };
+    return { model: modelId, baseUrl: 'https://api.minimax.io/v1' };
   }
 
   return { model: modelId, baseUrl: 'https://api.openai.com/v1' };

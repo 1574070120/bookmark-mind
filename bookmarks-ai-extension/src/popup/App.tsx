@@ -2,11 +2,9 @@ import { useState } from 'react';
 import { Loader2, PanelLeftClose, PanelLeftOpen, CircleDot } from 'lucide-react';
 import AIConfigPanel from './components/AIConfigPanel';
 import BookmarkList from './components/BookmarkList';
-import CategoryPreview from './components/CategoryPreview';
 import CleanupPanel from './components/CleanupPanel';
 import { useBookmarks } from '../hooks/useBookmarks';
 import { useAIConfig } from '../hooks/useAIConfig';
-import { useCategories } from '../hooks/useCategories';
 import { categorizeBookmarks } from '../services/ai-service';
 import {
   SHELL_NAV_ITEMS,
@@ -20,26 +18,37 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { bookmarks, isLoading: bookmarksLoading, refresh } = useBookmarks();
   const { config, updateConfig, isConfigured } = useAIConfig();
-  const { categories, setCategories, clearCategories } = useCategories();
-  const [isCategorizing, setIsCategorizing] = useState(false);
+  const [isOrganizing, setIsOrganizing] = useState(false);
+  const [organizeComplete, setOrganizeComplete] = useState(false);
 
   const handleOrganize = async () => {
     if (!isConfigured || bookmarks.length === 0) return;
 
-    setIsCategorizing(true);
+    setIsOrganizing(true);
+    setOrganizeComplete(false);
     try {
-      const result = await categorizeBookmarks(bookmarks, config);
-      setCategories(result);
-    } catch (error) {
-      console.error('分类失败:', error);
-    } finally {
-      setIsCategorizing(false);
-    }
-  };
+      const categories = await categorizeBookmarks(bookmarks, config);
 
-  const handleClearCategories = () => {
-    clearCategories();
-    setActiveTab('organize');
+      for (const category of categories) {
+        const folder = await chrome.bookmarks.create({ title: category.name });
+        for (const bookmark of category.bookmarks) {
+          if (bookmark.id) {
+            try {
+              await chrome.bookmarks.move(bookmark.id, { parentId: folder.id });
+            } catch (e) {
+              console.error(`移动书签失败: ${bookmark.title}`, e);
+            }
+          }
+        }
+      }
+
+      setOrganizeComplete(true);
+      refresh();
+    } catch (error) {
+      console.error('整理失败:', error);
+    } finally {
+      setIsOrganizing(false);
+    }
   };
 
   return (
@@ -150,14 +159,14 @@ function App() {
               <div className="flex h-full items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
               </div>
-            ) : categories.length > 0 ? (
-              <CategoryPreview categories={categories} onClear={handleClearCategories} />
             ) : (
               <BookmarkList
                 bookmarks={bookmarks}
                 onOrganize={handleOrganize}
-                isOrganizing={isCategorizing}
+                isOrganizing={isOrganizing}
+                organizeComplete={organizeComplete}
                 isAIConfigured={isConfigured}
+                onResetComplete={() => setOrganizeComplete(false)}
               />
             )}
           </main>

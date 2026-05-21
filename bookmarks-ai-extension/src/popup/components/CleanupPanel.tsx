@@ -136,28 +136,26 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
   const selectedCount = selectedIssues.size;
 
   return (
-    <div className="flex-1 flex flex-col h-full">
-      {/* Header */}
-      <div className="p-4 bg-white border-b border-gray-200">
-        <div className="flex items-center gap-2 mb-3">
-          <Trash2 className="w-5 h-5 text-red-500" />
-          <h2 className="text-lg font-semibold text-gray-800">清理书签</h2>
+    <div className="flex h-full flex-col">
+      <div className="border-b border-slate-200 bg-white px-5 py-4">
+        <div className="mb-3 flex items-center gap-2">
+          <Trash2 className="h-5 w-5 text-rose-500" />
+          <h2 className="text-base font-semibold text-slate-900">清理书签</h2>
         </div>
 
-        {/* Options */}
-        <div className="flex items-center gap-4 mb-3 text-sm">
-          <label className="flex items-center gap-2 cursor-pointer">
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm">
+          <label className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 cursor-pointer">
             <input
               type="checkbox"
               checked={options.checkDeadLinks}
               onChange={(e) => setOptions({ ...options, checkDeadLinks: e.target.checked })}
-              className="w-4 h-4 text-indigo-600 rounded"
+              className="h-4 w-4 rounded text-indigo-600"
             />
-            <span className="text-gray-600">检测死链</span>
+            <span className="text-slate-600">检测死链</span>
           </label>
           {options.checkDeadLinks && (
-            <div className="flex items-center gap-1 text-gray-500">
-              <Settings className="w-3 h-3" />
+            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">
+              <Settings className="h-3 w-3" />
               <span>最多检测</span>
               <input
                 type="number"
@@ -165,7 +163,7 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
                 onChange={(e) =>
                   setOptions({ ...options, maxDeadLinkCheck: parseInt(e.target.value) || 50 })
                 }
-                className="w-14 px-2 py-1 border border-gray-300 rounded text-center"
+                className="w-14 rounded-md border border-slate-200 bg-white px-2 py-1 text-center text-slate-700 outline-none"
                 min={10}
                 max={200}
               />
@@ -177,46 +175,44 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
         <button
           onClick={handleScan}
           disabled={isScanning || bookmarks.length === 0}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-rose-500 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isScanning ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
               {progress.stage} ({progress.current}/{progress.total})
             </>
           ) : (
             <>
-              <RefreshCw className="w-5 h-5" />
+              <RefreshCw className="h-5 w-5" />
               开始扫描
             </>
           )}
         </button>
       </div>
 
-      {/* Results */}
       {deleteComplete ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <Check className="w-8 h-8 text-green-600" />
+        <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100">
+            <Check className="h-8 w-8 text-emerald-600" />
           </div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">清理完成!</h3>
-          <p className="text-sm text-gray-500">已删除 {selectedCount} 个问题书签</p>
+          <h3 className="mb-2 text-lg font-semibold text-slate-900">清理完成!</h3>
+          <p className="text-sm text-slate-500">已删除 {selectedCount} 个问题书签</p>
         </div>
       ) : result && totalIssues > 0 ? (
         <>
-          {/* Summary */}
-          <div className="p-4 bg-gray-50 border-b border-gray-200">
-            <div className="flex items-center justify-between mb-3">
+          <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm text-gray-500">发现 {totalIssues} 个问题</p>
-                <p className="text-xs text-gray-400">
+                <p className="text-sm text-slate-500">发现 {totalIssues} 个问题</p>
+                <p className="text-xs text-slate-400">
                   已选择 {selectedCount} 个待删除
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={handleSelectAll}
-                  className="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:bg-gray-50"
+                  className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   {result && getSelectableBookmarkIds(result).every((id) => selectedIssues.has(id))
                     ? '取消全选'
@@ -225,12 +221,12 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
                 <button
                   onClick={handleDelete}
                   disabled={selectedCount === 0 || isDeleting}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-1 rounded-xl bg-rose-500 px-3 py-1.5 text-sm text-white transition-colors hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isDeleting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="h-4 w-4" />
                   )}
                   删除
                 </button>
@@ -238,8 +234,7 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
             </div>
           </div>
 
-          {/* Issue List */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
             {([
               { key: 'dead-link', issues: result.deadLinks },
               { key: 'duplicate', issues: result.duplicates },
@@ -251,10 +246,10 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
 
               return (
                 <div key={key}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <config.icon className={`w-4 h-4 ${config.color}`} />
-                    <span className="font-medium text-gray-700">{config.label}</span>
-                    <span className="text-sm text-gray-400">({issues.length})</span>
+                  <div className="mb-2 flex items-center gap-2">
+                    <config.icon className={`h-4 w-4 ${config.color}`} />
+                    <span className="font-medium text-slate-700">{config.label}</span>
+                    <span className="text-sm text-slate-400">({issues.length})</span>
                   </div>
                   <div className="space-y-1">
                     {issues.map((issue: BookmarkIssue, index: number) => (
@@ -272,20 +267,20 @@ export default function CleanupPanel({ bookmarks, onRefresh }: CleanupPanelProps
           </div>
         </>
       ) : result && totalIssues === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <Check className="w-8 h-8 text-green-600" />
+        <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100">
+            <Check className="h-8 w-8 text-emerald-600" />
           </div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">书签很健康!</h3>
-          <p className="text-sm text-gray-500">没有发现需要清理的书签</p>
+          <h3 className="mb-2 text-lg font-semibold text-slate-900">书签很健康!</h3>
+          <p className="text-sm text-slate-500">没有发现需要清理的书签</p>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <AlertTriangle className="w-8 h-8 text-gray-400" />
+        <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
+            <AlertTriangle className="h-8 w-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">点击开始扫描</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="mb-2 text-lg font-semibold text-slate-900">点击开始扫描</h3>
+          <p className="text-sm text-slate-500">
             检测死链、重复、空标题等问题书签
           </p>
         </div>
@@ -305,10 +300,10 @@ function IssueItem({ issue, isSelected, onToggle }: IssueItemProps) {
 
   return (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+      className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-colors ${
         isSelected
           ? `${config.bgColor} ${config.borderColor}`
-          : 'bg-white border-gray-200 hover:border-gray-300'
+          : 'border-slate-200 bg-white hover:border-slate-300'
       }`}
       onClick={onToggle}
     >
@@ -317,19 +312,19 @@ function IssueItem({ issue, isSelected, onToggle }: IssueItemProps) {
         checked={isSelected}
         onChange={onToggle}
         onClick={(event) => event.stopPropagation()}
-        className="w-4 h-4 text-indigo-600 rounded flex-shrink-0"
+        className="h-4 w-4 flex-shrink-0 rounded text-indigo-600"
       />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-800 truncate">
+        <p className="truncate text-sm font-medium text-slate-900">
           {issue.bookmark.title || '无标题'}
         </p>
         {issue.bookmark.url && (
-          <p className="text-xs text-gray-400 truncate">{issue.bookmark.url}</p>
+          <p className="truncate text-xs text-slate-500">{issue.bookmark.url}</p>
         )}
-        <p className="text-xs text-gray-500 mt-1">{issue.reason}</p>
+        <p className="mt-1 text-xs text-slate-500">{issue.reason}</p>
       </div>
       {issue.relatedBookmarks && issue.relatedBookmarks.length > 0 && (
-        <span className="text-xs text-gray-400 flex-shrink-0">
+        <span className="flex-shrink-0 text-xs text-slate-400">
           +{issue.relatedBookmarks.length}
         </span>
       )}

@@ -4,9 +4,9 @@
 
 :root {
   --color-primary: #6366f1;
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-text: #1e293b;
+  --color-bg: #f1f5f9;
+  --color-bg-secondary: #ffffff;
+  --color-text: #0f172a;
   --color-text-secondary: #64748b;
   --color-border: #e2e8f0;
   --color-success: #22c55e;
@@ -27,25 +27,30 @@
 
 body {
   @apply bg-[var(--color-bg)] text-[var(--color-text)];
-  width: 380px;
-  min-height: 500px;
+  width: 100%;
+  min-width: 760px;
+  min-height: 640px;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+#root {
+  min-height: 640px;
+}
+
 .btn-primary {
-  @apply bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg font-medium 
+  @apply bg-[var(--color-primary)] text-white px-4 py-2 rounded-xl font-medium 
          hover:opacity-90 transition-opacity disabled:opacity-50;
 }
 
 .btn-secondary {
   @apply bg-[var(--color-bg-secondary)] text-[var(--color-text)] px-4 py-2 
-         rounded-lg font-medium border border-[var(--color-border)]
+         rounded-xl font-medium border border-[var(--color-border)]
          hover:border-[var(--color-primary)] transition-colors;
 }
 
 .input-field {
-  @apply w-full px-3 py-2 rounded-lg border border-[var(--color-border)]
+  @apply w-full px-3 py-2 rounded-xl border border-[var(--color-border)]
          bg-[var(--color-bg)] text-[var(--color-text)]
          focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 
          focus:ring-[var(--color-primary)] transition-colors;
