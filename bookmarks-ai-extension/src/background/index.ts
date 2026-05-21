@@ -1,12 +1,24 @@
 // Background Service Worker for BookmarkMind
 
+// 配置侧边栏
+chrome.sidePanel.setOptions({
+  path: 'src/popup/index.html',
+});
+
+// 监听扩展图标点击，打开侧边栏
+chrome.action.onClicked.addListener(async (tab) => {
+  if (tab.id) {
+    await chrome.sidePanel.open({ tabId: tab.id });
+  }
+});
+
 // 监听来自 popup 或 content script 的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'GET_BOOKMARKS') {
     handleGetBookmarks()
       .then(sendResponse)
       .catch((error) => sendResponse({ error: error.message }));
-    return true; // 异步响应
+    return true;
   }
 
   if (message.type === 'ORGANIZE_BOOKMARKS') {
@@ -50,14 +62,12 @@ async function handleOrganizeBookmarks(categories: Array<{
   const results: Array<{ folderId: string; movedCount: number }> = [];
 
   for (const category of categories) {
-    // 创建文件夹
     const folder = await chrome.bookmarks.create({
       title: category.name,
     });
 
     let movedCount = 0;
 
-    // 移动书签到文件夹
     for (const bookmark of category.bookmarks) {
       if (bookmark.id) {
         try {

@@ -12,9 +12,10 @@ const backgroundFile = files.find(f => f.startsWith('background-') && f.endsWith
 const manifestPath = path.join(distDir, 'manifest.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-// Update paths
-manifest.action.default_popup = 'src/popup/index.html';
-manifest.side_panel.default_path = 'src/popup/index.html';
+// Update paths (only set side_panel, not action popup - we use sidePanel API instead)
+if (manifest.side_panel) {
+  manifest.side_panel.default_path = 'src/popup/index.html';
+}
 manifest.background.service_worker = `assets/${backgroundFile}`;
 
 // Copy assets from public
@@ -27,5 +28,5 @@ if (fs.existsSync(publicAssets)) {
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
 console.log('Manifest updated with correct paths:');
-console.log('- popup:', manifest.action.default_popup);
+console.log('- side_panel:', manifest.side_panel?.default_path);
 console.log('- background:', manifest.background.service_worker);
