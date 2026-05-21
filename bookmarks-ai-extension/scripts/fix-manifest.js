@@ -14,6 +14,7 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
 // Update paths
 manifest.action.default_popup = 'src/popup/index.html';
+manifest.side_panel.default_path = 'src/popup/index.html';
 manifest.background.service_worker = `assets/${backgroundFile}`;
 
 // Copy assets from public
